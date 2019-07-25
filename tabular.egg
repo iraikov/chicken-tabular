@@ -1,0 +1,12 @@
+;; -*- Scheme -*-
+
+(
+ (license "GPL-3")
+ (category data)
+ (dependencies srfi-1 srfi-127 utf8 matchable )
+ (test-dependencies test)
+ (author "Ivan Raikov")
+ (synopsis "Parsing and formatting of tabular text data such as comma- and delimiter-separated values (CSV and DSV).")
+ (components (extension tabular))
+ )
+
