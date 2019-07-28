@@ -1,5 +1,9 @@
 
-(import scheme (chicken port) test tabular)
+(import scheme (chicken base) (chicken pathname) (chicken string)
+        (chicken process) (chicken port) (chicken process-context)
+        test tabular)
+
+(define prefix (pathname-directory (program-name)))
 
 (define (generator->list gen)
   (let recur ((ax '()))
@@ -54,7 +58,7 @@
  (test-group "csv read from file"
  	    (test
               `("Bank Name" "City" "ST" "CERT" "Acquiring Institution" "Closing Date" "Updated Date")
-               (let ((input (open-input-file "tests/data/banklist.csv")))
+               (let ((input (open-input-file (make-pathname prefix "data/banklist.csv"))))
                  (let-values (((proc strm) (reader input delimiter: #\,)))
                    (let ((lst (stream->list proc strm)))
                      (close-input-port input)
@@ -98,7 +102,7 @@
              (test
               `("Bank Name" "City" "ST" "CERT" "Acquiring Institution" "Closing Date" "Updated Date")
               (car
-               (let* ((input (open-input-file "tests/data/banklist.csv"))
+               (let* ((input (open-input-file (make-pathname prefix "data/banklist.csv")))
                       (gen (reader* input delimiter: #\,))
                       (lst (generator->list gen)))
                  (close-input-port input)
