@@ -102,12 +102,13 @@ given output specification. The writer procedure is of the form
 
 ## Version history
 
+- 1.2 : Fix for escaped double quotes [thanks to Matt Welland for reporting]
 - 1.0 : Initial release
 
 ## License
 
 >
-> Copyright 2019 Ivan Raikov
+> Copyright 2019-2020 Ivan Raikov
 > 
 >  This program is free software: you can redistribute it and/or modify
 >  it under the terms of the GNU General Public License as published by
