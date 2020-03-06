@@ -54,6 +54,22 @@
                              (lambda (port) (reader port delimiter: #\|)))))
                (stream->list proc strm))
               ))
+(let-values (((proc strm)
+              (call-with-input-string
+                  "\"Test \n1\",\"Test \"\"2\"\"\",Test 3\nTest 4,Test 5\n"
+                (lambda (port) (reader port delimiter: #\,)))))
+  (stream->list proc strm))
+
+ (test-group "csv read from string with escaped quotes"
+ 	    (test
+ 	     `(("Test \n1" "Test \"2\"" "Test 3")
+ 	       ("Test 4" "Test 5" ))
+             (let-values (((proc strm)
+                           (call-with-input-string
+                               "\"Test \n1\",\"Test \"\"2\"\"\",Test 3\nTest 4,Test 5\n"
+                             (lambda (port) (reader port delimiter: #\,)))))
+               (stream->list proc strm))
+              ))
 
  (test-group "csv read from file"
  	    (test

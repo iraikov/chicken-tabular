@@ -201,7 +201,7 @@
   (match s
          ((#\" . _)
           (let ((rst (lseq-rest s)))
-            (and (char=? (lseq-first rst) #\") `(,(list #\") ,(lseq-rest rst)))))
+            (and (char=? (lseq-first rst) #\") `(#\" ,(lseq-rest rst)))))
          (else #f)))
 
 
