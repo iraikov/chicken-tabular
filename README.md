@@ -13,10 +13,10 @@ values (CSV and DSV), as well as fixed-width columns.
 
 ### Readers
    
-<procedure>reader:: INPUT [DELIMITER: #\,] [EOL: "\n"] [COMMENT-CHAR: #f]
-[NA: #f] [COLUMN-NAMES: #f] [COLUMN-WIDTHS: #f] [RETURN-NAMES: #f] -> READER STREAM</procedure>
+`reader:: INPUT [DELIMITER: #\,] [EOL: "\n"] [COMMENT-CHAR: #f]
+[NA: #f] [COLUMN-NAMES: #f] [COLUMN-WIDTHS: #f] [RETURN-NAMES: #f] -> READER STREAM`
 
-Constructs a reader procedure for the given input format specification and returns two values: the reader procedure and the input stream. The reader procedure is of the form `LAMBDA STRM -> RECORD STRM. It reads one record from the given input stream and by default returns the record as a list of values and the remainder of the input stream. If optional argument `RETURN-NAMES` is true, the record will be returned as an alist where the keys are column names (if `COLUMN-NAMES` is provided) or indices, and the values are the column values. 
+Constructs a reader procedure for the given input format specification and returns two values: the reader procedure and the input stream. The reader procedure is of the form `LAMBDA STRM -> RECORD STRM`. It reads one record from the given input stream and by default returns the record as a list of values and the remainder of the input stream. If optional argument `RETURN-NAMES` is true, the record will be returned as an alist where the keys are column names (if `COLUMN-NAMES` is provided) or indices, and the values are the column values. 
 
 - Argument `INPUT` is a string or a port.
 - Argument `DELIMITER` specifies the delimiter character (default is `#\,`). If its value is #f, then `COLUMNN-WIDTHS` must be specified.
@@ -27,10 +27,10 @@ Constructs a reader procedure for the given input format specification and retur
 - Argument `COLUMN-WIDTHS` specifies column widths  which will be used if `DELIMITER` is not specified (default: none).
 - Argument `RETURN-NAMES` specifies that each returned record will have the form of an alist with column name and value pairs. If `COLUMN-NAMES` is the symbol 'headers then the first line of the input will be used to infer the column names. If `COLUMN-NAMES` is not provided, the column index will be used as key instead.
 
-<procedure>reader*:: INPUT [DELIMITER: #\,] [EOL: "\n"] [COMMENT-CHAR: #f]
-[NA: #f] [COLUMN-NAMES: #f] [COLUMN-WIDTHS: #f] [RETURN-NAMES: #f] -> READER</procedure>
+`reader*:: INPUT [DELIMITER: #\,] [EOL: "\n"] [COMMENT-CHAR: #f]
+[NA: #f] [COLUMN-NAMES: #f] [COLUMN-WIDTHS: #f] [RETURN-NAMES: #f] -> READER`
 
-Constructs a reader generator procedure for the given input format specification and returns the reader procedure. The reader procedure is of the form `LAMBDA () -> RECORD. It reads one record from the given input stream and by default returns the record as a list of values. If optional argument `RETURN-NAMES` is true, the record will be returned as an alist where the keys are column names (if `COLUMN-NAMES` is provided) or indices, and the values are the column values. 
+Constructs a reader generator procedure for the given input format specification and returns the reader procedure. The reader procedure is of the form `LAMBDA () -> RECORD`. It reads one record from the given input stream and by default returns the record as a list of values. If optional argument `RETURN-NAMES` is true, the record will be returned as an alist where the keys are column names (if `COLUMN-NAMES` is provided) or indices, and the values are the column values. 
 
 - Argument `INPUT` is a string or a port.
 - Argument `DELIMITER` specifies the delimiter character (default is `#\,`). If its value is #f, then `COLUMNN-WIDTHS` must be specified.
@@ -44,7 +44,7 @@ Constructs a reader generator procedure for the given input format specification
 
 ### Writers
 
-<procedure> writer:: OUTPUT [DELIMITER: #\,] [COLUMN-WIDTHS: #f] [ENDLINE: "\n"] -> WRITER </procedure>
+` writer:: OUTPUT [DELIMITER: #\,] [COLUMN-WIDTHS: #f] [ENDLINE: "\n"] -> WRITER `
 
 Constructs a writer procedure that writes out records according to the
 given output specification. The writer procedure is of the form
