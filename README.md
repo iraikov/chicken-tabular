@@ -25,7 +25,7 @@ Constructs a reader procedure for the given input format specification and retur
 - Argument `NA` specifies a default value to be supplied when a given field is empty (default: none).
 - Argument `COLUMN-NAMES` specifies column names which will be used if `RETURN-NAMES` is true (default: none).
 - Argument `COLUMN-WIDTHS` specifies column widths  which will be used if `DELIMITER` is not specified (default: none).
-- Argument `RETURN-NAMES` specifies that each returned record will have the form of an alist with column name and value pairs. If `COLUMN-NAMES` is not provided, the column index will be used as key instead.
+- Argument `RETURN-NAMES` specifies that each returned record will have the form of an alist with column name and value pairs. If `COLUMN-NAMES` is the symbol 'headers then the first line of the input will be used to infer the column names. If `COLUMN-NAMES` is not provided, the column index will be used as key instead.
 
 <procedure>reader*:: INPUT [DELIMITER: #\,] [EOL: "\n"] [COMMENT-CHAR: #f]
 [NA: #f] [COLUMN-NAMES: #f] [COLUMN-WIDTHS: #f] [RETURN-NAMES: #f] -> READER</procedure>
@@ -39,7 +39,7 @@ Constructs a reader generator procedure for the given input format specification
 - Argument `NA` specifies a default value to be supplied when a given field is empty (default: none).
 - Argument `COLUMN-NAMES` specifies column names which will be used if `RETURN-NAMES` is true (default: none).
 - Argument `COLUMN-WIDTHS` specifies column widths  which will be used if `DELIMITER` is not specified (default: none).
-- Argument `RETURN-NAMES` specifies that each returned record will have the form of an alist with column name and value pairs. If `COLUMN-NAMES` is not provided, the column index will be used as key instead.
+- Argument `RETURN-NAMES` specifies that each returned record will have the form of an alist with column name and value pairs. If `COLUMN-NAMES` is the symbol 'headers then the first line of the input will be used to infer the column names. If `COLUMN-NAMES` is not provided, the column index will be used as key instead.
 
 
 ### Writers
@@ -102,13 +102,14 @@ given output specification. The writer procedure is of the form
 
 ## Version history
 
+- 1.3 : Fix for return-names [thanks to Vasilij Schneidermann for reporting]
 - 1.2 : Fix for escaped double quotes [thanks to Matt Welland for reporting]
 - 1.0 : Initial release
 
 ## License
 
 >
-> Copyright 2019-2020 Ivan Raikov
+> Copyright 2019-2021 Ivan Raikov
 > 
 >  This program is free software: you can redistribute it and/or modify
 >  it under the terms of the GNU General Public License as published by
