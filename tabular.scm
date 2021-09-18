@@ -328,7 +328,12 @@
                      ((string? input) (string->lseq input))
                      (else (error 'reader "unknown input type")))))
     (match-let (((headers ls) (match column-names
-                                     ('header (precord ls))
+                                     ('header 
+                                      (match-let (((rec rst) (precord ls)))
+                                                 (let ((rst (match (lseq-prefix-or-empty rst eoll)
+                                                                   ((prefix rst1) rst1)
+                                                                   (else (error 'reader "unable to parse record" rst)))))
+                                                   `(,rec ,rst))))
                                      ((and (? list?) lst) `(,column-names ,ls))
                                      (else `(#f ,ls)))))
                (let* (
@@ -356,7 +361,9 @@
                                pf))
                       
                       (pfch (if (and return-names headers)
-                                (compose (lambda (rec.rst) `(,(zip headers (car rec.rst)) ,(cadr rec.rst))) pfc)
+                                (compose (lambda (rec.rst)
+                                           (if (eof-object? rec.rst) (eof-object)
+                                               `(,(zip headers (car rec.rst)) ,(cadr rec.rst)))) pfc)
                                 pfc))
                       )
                  (values pfch ls)
@@ -381,8 +388,11 @@
                                     (else (error 'reader* "unknown input type"))))))
     (let ((headers (match column-names
                           ('header (match-let (((rec rst) (precord (ls))))
-                                              (ls rst)
-                                              rec))
+                                              (let ((rst (match (lseq-prefix-or-empty rst eoll)
+                                                                ((prefix rst1) rst1)
+                                                                (else (error 'reader* "unable to parse record" (ls) rst)))))
+                                                (ls rst)
+                                                rec)))
                           ((and (? list?) lst) `(,column-names ,ls))
                           (else `(#f ,ls)))))
       (let* (
@@ -409,7 +419,10 @@
                       pf))
              
              (pfch (if (and return-names headers)
-                       (compose (lambda (rec.rst) `(,(zip headers (car rec.rst)) ,(cadr rec.rst))) pfc)
+                       (compose (lambda (rec.rst)
+                                  (if (eof-object? rec.rst)
+                                      (eof-object)
+                                      `(,(zip headers (car rec.rst)) ,(cadr rec.rst)))) pfc)
                        pfc))
              )
         pfch

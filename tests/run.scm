@@ -83,6 +83,24 @@
             )
                      
 
+ (test-group "csv read from file with column names inferred from header"
+ 	    (test
+              `(("Bank Name" "Banks of Wisconsin d/b/a Bank of Kenosha")
+                ("City" "Kenosha")
+                ("ST" "WI")
+                ("CERT" "35386")
+                ("Acquiring Institution" "North Shore Bank, FSB")
+                ("Closing Date" "31-May-13")
+                ("Updated Date" "31-May-13"))
+               (let ((input (open-input-file (make-pathname prefix "data/banklist.csv"))))
+                 (let-values (((proc strm) (reader input delimiter: #\, column-names: 'header return-names: #t)))
+                   (let ((lst (stream->list proc strm)))
+                     (close-input-port input)
+                     (car lst)))
+                 ))
+            )
+                     
+
  (test-group "csv read from string generator"
  	    (test
  	     `(("Test \n1" "Test 2" "Test 3")
