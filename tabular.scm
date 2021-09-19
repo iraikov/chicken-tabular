@@ -419,10 +419,10 @@
                       pf))
              
              (pfch (if (and return-names headers)
-                       (compose (lambda (rec.rst)
-                                  (if (eof-object? rec.rst)
+                       (compose (lambda (rec)
+                                  (if (eof-object? rec)
                                       (eof-object)
-                                      `(,(zip headers (car rec.rst)) ,(cadr rec.rst)))) pfc)
+                                      (zip headers rec))) pfc)
                        pfc))
              )
         pfch
