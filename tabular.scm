@@ -393,8 +393,8 @@
                                                                 (else (error 'reader* "unable to parse record" (ls) rst)))))
                                                 (ls rst)
                                                 rec)))
-                          ((and (? list?) lst) `(,column-names ,ls))
-                          (else `(#f ,ls)))))
+                          ((and (? list?) lst) lst)
+                          (else #f))))
       (let* (
              (pf (lambda ()
                    (if (null? (ls))

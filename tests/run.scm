@@ -101,6 +101,22 @@
             )
                      
 
+ (test-group "csv read from file with specified column names"
+ 	    (test
+             `(("C1" "Column 1")
+               ("C2" "Column 2")
+               ("C3" "Column 3"))
+               (let ((input (open-input-file (make-pathname prefix "data/test1.csv"))))
+                 (let-values (((proc strm) (reader input delimiter: #\,
+                                                   column-names: '("C1" "C2" "C3" )
+                                                   return-names: #t)))
+                   (let ((lst (stream->list proc strm)))
+                     (close-input-port input)
+                     (car lst)))
+                 ))
+            )
+                     
+
  (test-group "csv read generator from file with column names inferred from header"
  	    (test
               `(("Bank Name" "Banks of Wisconsin d/b/a Bank of Kenosha")
@@ -112,6 +128,22 @@
                 ("Updated Date" "31-May-13"))
                (let ((input (open-input-file (make-pathname prefix "data/banklist.csv"))))
                  (let ((reader (reader* input delimiter: #\, column-names: 'header return-names: #t)))
+                   (let ((rec (reader)))
+                     (close-input-port input)
+                     rec))
+                 ))
+            )
+                     
+
+ (test-group "csv read generator from file with specified column names"
+ 	    (test
+             `(("C1" "Column 1")
+               ("C2" "Column 2")
+               ("C3" "Column 3"))
+               (let ((input (open-input-file (make-pathname prefix "data/test1.csv"))))
+                 (let ((reader (reader* input delimiter: #\,
+                                        column-names: '("C1" "C2" "C3" )
+                                        return-names: #t)))
                    (let ((rec (reader)))
                      (close-input-port input)
                      rec))
