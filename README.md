@@ -23,9 +23,9 @@ Constructs a reader procedure for the given input format specification and retur
 - Argument `EOL` specifies the end-of-line string (default is `"\n"`).
 - Argument `COMMENT-CHAR` specifies a comment character: the reader will skip all lines that start with this character (default: none).
 - Argument `NA` specifies a default value to be supplied when a given field is empty (default: none).
-- Argument `COLUMN-NAMES` specifies column names which will be used if `RETURN-NAMES` is true (default: none).
+- Argument `COLUMN-NAMES` specifies column names which will be used if `RETURN-NAMES` is true (default: none). If `COLUMN-NAMES` is the symbol `'header` then the first line of the input will be used to infer the column names. 
 - Argument `COLUMN-WIDTHS` specifies column widths  which will be used if `DELIMITER` is not specified (default: none).
-- Argument `RETURN-NAMES` specifies that each returned record will have the form of an alist with column name and value pairs. If `COLUMN-NAMES` is the symbol `'header` then the first line of the input will be used to infer the column names. If `COLUMN-NAMES` is not provided, the column index will be used as key instead.
+- Argument `RETURN-NAMES` specifies that each returned record will have the form of an alist with column name and value pairs. If `COLUMN-NAMES` is not provided, the column index will be used as key instead.
 
 `reader*:: INPUT [DELIMITER: #\,] [EOL: "\n"] [COMMENT-CHAR: #f]
 [NA: #f] [COLUMN-NAMES: #f] [COLUMN-WIDTHS: #f] [RETURN-NAMES: #f] -> READER`
@@ -37,9 +37,9 @@ Constructs a reader generator procedure for the given input format specification
 - Argument `EOL` specifies the end-of-line string (default is `"\n"`).
 - Argument `COMMENT-CHAR` specifies a comment character: the reader will skip all lines that start with this character (default: none).
 - Argument `NA` specifies a default value to be supplied when a given field is empty (default: none).
-- Argument `COLUMN-NAMES` specifies column names which will be used if `RETURN-NAMES` is true (default: none).
+- Argument `COLUMN-NAMES` specifies column names which will be used if `RETURN-NAMES` is true (default: none). If `COLUMN-NAMES` is the symbol `'header` then the first line of the input will be used to infer the column names. 
 - Argument `COLUMN-WIDTHS` specifies column widths  which will be used if `DELIMITER` is not specified (default: none).
-- Argument `RETURN-NAMES` specifies that each returned record will have the form of an alist with column name and value pairs. If `COLUMN-NAMES` is the symbol `'header` then the first line of the input will be used to infer the column names. If `COLUMN-NAMES` is not provided, the column index will be used as key instead.
+- Argument `RETURN-NAMES` specifies that each returned record will have the form of an alist with column name and value pairs. If `COLUMN-NAMES` is not provided, the column index will be used as key instead.
 
 
 ### Writers
