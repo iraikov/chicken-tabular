@@ -80,6 +80,15 @@ given output specification. The writer procedure is of the form
                (print (stream->list proc strm)))
 
 
+;; Prints all the records from the given file, where column names are inferred from the first line
+;; and each field in a record is prefixed by its column name
+(let ((input (open-input-file "file.csv")))
+  (let-values (((proc strm) (reader input delimiter: #\, column-names: 'header return-names: #t)))
+    (let ((lst (stream->list proc strm)))
+      (close-input-port input)
+      (pretty-print lst)
+      ))
+  )
 
 ;; Prints the first record of the given file
 (let ((input (open-input-file "file.csv"))
