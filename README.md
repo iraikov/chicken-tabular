@@ -111,6 +111,7 @@ given output specification. The writer procedure is of the form
 
 ## Version history
 
+- 1.4 : Fix for return-names in reader generator [thanks to Vasilij Schneidermann for reporting]
 - 1.3 : Fix for return-names [thanks to Vasilij Schneidermann for reporting]
 - 1.2 : Fix for escaped double quotes [thanks to Matt Welland for reporting]
 - 1.0 : Initial release
