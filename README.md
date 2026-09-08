@@ -111,6 +111,7 @@ given output specification. The writer procedure is of the form
 
 ## Version history
 
+- 1.5 : Ported to CHICKEN 6
 - 1.4 : Fix for return-names in reader generator [thanks to Vasilij Schneidermann for reporting]
 - 1.3 : Fix for return-names [thanks to Vasilij Schneidermann for reporting]
 - 1.2 : Fix for escaped double quotes [thanks to Matt Welland for reporting]
@@ -119,7 +120,7 @@ given output specification. The writer procedure is of the form
 ## License
 
 >
-> Copyright 2019-2021 Ivan Raikov
+> Copyright 2019-2026 Ivan Raikov
 > 
 >  This program is free software: you can redistribute it and/or modify
 >  it under the terms of the GNU General Public License as published by

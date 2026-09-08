@@ -4,9 +4,10 @@
  (synopsis "Parsing and formatting of tabular text data such as comma- and delimiter-separated values (CSV and DSV).")
  (license "GPL-3")
  (category data)
- (dependencies srfi-1 srfi-127 utf8 matchable )
+ (dependencies srfi-1 srfi-127 utf8 matchable regex)
  (test-dependencies test)
  (author "Ivan Raikov")
- (components (extension tabular))
+ (components (extension tabular 
+                        (csc-options "-O3" "-d0" "-strict-types" "-no-procedure-checks")))
  )
 

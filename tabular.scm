@@ -56,7 +56,7 @@
 
 	(reader reader* writer record fwrecord)
 	
-	(import scheme (chicken base) (chicken format) (chicken string) (chicken io)
+	(import scheme (scheme base) (chicken base) (chicken format) (chicken string) (chicken io)
                 matchable srfi-1 srfi-127
                 (only utf8-srfi-13 string-concatenate string-take string-null?)
                 (only utf8-srfi-14 char-set-contains?  ucs-range->char-set string->char-set 
@@ -306,9 +306,6 @@
 
 
  
-(define *eof-object* (read (open-input-string "")))
-(define (eof-object) *eof-object*)
-
 ;; TODO:
 ;; 5) fixed width columns
 
