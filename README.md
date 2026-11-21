@@ -44,7 +44,7 @@ Constructs a reader generator procedure for the given input format specification
 
 ### Writers
 
-` writer:: OUTPUT [DELIMITER: #\,] [COLUMN-WIDTHS: #f] [ENDLINE: "\n"] -> WRITER `
+` writer:: OUTPUT [DELIMITER: #\,] [COLUMN-WIDTHS: #f] [ALIGN: #f] [ENDLINE: "\n"] -> WRITER `
 
 Constructs a writer procedure that writes out records according to the
 given output specification. The writer procedure is of the form
@@ -54,6 +54,22 @@ given output specification. The writer procedure is of the form
 - Argument `DELIMITER` specifies the delimiter character (default is `#\,`). If its value is #f, then `COLUMNN-WIDTHS` must be specified.
 - Argument `ENDLINE` specifies the end-of-line string (default is `"\n"`).
 - Argument `COLUMN-WIDTHS` specifies column widths  which will be used if `DELIMITER` is not specified (default: none).
+  Widths count characters. Each field is written with the width of its
+  column: a shorter field is padded with spaces, and a longer field is
+  cut to the width. The fixed-width reader returns the padding spaces
+  as part of each field, so trim them after reading if needed.
+- Argument `ALIGN` is a list with one entry per column, each either
+  `'left` or `'right`, and is only used together with `COLUMN-WIDTHS`.
+  A `'left` column is padded on the right, and a `'right` column is
+  padded on the left. The default `#f` makes all columns `'left`.
+
+For example, this writes `"ab   cdefg  7\n"`:
+
+```scheme
+((writer (current-output-port) delimiter: #f
+         column-widths: '(5 5 3) align: '(left left right))
+ (list "ab" "cdefgh" "7"))
+```
 
 
 ## Examples

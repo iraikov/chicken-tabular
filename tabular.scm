@@ -36,7 +36,7 @@
 ;;   5) The optional argument comment-char specifies that all lines
 ;;   that start with the given character should be dropped.
 ;;
-;;   Copyright 2019 Ivan Raikov
+;;   Copyright 2019-2026 Ivan Raikov
 ;;
 ;;   This program is free software: you can redistribute it and/or
 ;;   modify it under the terms of the GNU General Public License as
@@ -58,7 +58,8 @@
 	
 	(import scheme (scheme base) (chicken base) (chicken format) (chicken string) (chicken io)
                 matchable srfi-1 srfi-127
-                (only utf8-srfi-13 string-concatenate string-take string-null?)
+                (only utf8-srfi-13 string-concatenate string-take string-null?
+                      string-pad string-pad-right)
                 (only utf8-srfi-14 char-set-contains?  ucs-range->char-set string->char-set 
                       char-set? char-set char-set-union char-set-complement char-set-difference
                       char-set:full char-set:ascii)
@@ -437,12 +438,27 @@
 
 (define (normalise-quotes s)  (string-substitute* s `((,rx-quote . "\"\""))))
 
-(define (writer output #!key (delimiter #\,) (column-widths #f) (endline "\n") )
+;; Fits a field into a column of fixed width.  A field longer than the
+;; width keeps its first WIDTH characters.  A shorter field is padded
+;; with spaces: on the right when ALIGN is 'left, on the left when
+;; ALIGN is 'right.  Widths count characters, not bytes.
+(define (fit-field str width align)
+  (let ((cut (if (> (string-length str) width) (string-take str width) str)))
+    (match align
+      ('left  (string-pad-right cut width))
+      ('right (string-pad cut width))
+      (else (error 'writer "column alignment must be 'left or 'right" align)))))
+
+(define (writer output #!key (delimiter #\,) (column-widths #f) (align #f) (endline "\n") )
 
   (if (and delimiter column-widths)
       (error 'writer "both delimiter and column-widths are provided; only one or the other must be specified"))
   (if (not (or delimiter column-widths))
       (error 'writer "neither delimiter and column-widths are provided; one or the other must be specified"))
+  (if (and align (not column-widths))
+      (error 'writer "align is only used together with column-widths"))
+  (if align
+      (assert (= (length align) (length column-widths))))
   (if delimiter (check-delimiter delimiter #f))
 
    (let* (
@@ -460,7 +476,10 @@
                  str)))
           (format-fields
            (if column-widths
-               (lambda (ls) (map (lambda (fld wd) (string-take (format-field fld) wd)) ls column-widths ))
+               (let ((aligns (or align (map (lambda (wd) 'left) column-widths))))
+                 (lambda (ls)
+                   (map (lambda (fld wd al) (fit-field (format-field fld) wd al))
+                        ls column-widths aligns)))
                (lambda (ls) (map format-field ls))))
           (format-record
            (if delimiter 
