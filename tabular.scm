@@ -36,7 +36,7 @@
 ;;   5) The optional argument comment-char specifies that all lines
 ;;   that start with the given character should be dropped.
 ;;
-;;   Copyright 2019 Ivan Raikov
+;;   Copyright 2019-2026 Ivan Raikov
 ;;
 ;;   This program is free software: you can redistribute it and/or
 ;;   modify it under the terms of the GNU General Public License as
