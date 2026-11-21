@@ -1,6 +1,7 @@
 
 (import scheme (chicken base) (chicken pathname) (chicken string)
         (chicken process) (chicken port) (chicken process-context)
+        (only utf8-srfi-13 string-trim-right)
         test tabular)
 
 (define prefix (pathname-directory (program-name)))
@@ -234,6 +235,69 @@
                   (out (list "Test 1" "Test 2" "Test 3")
                        (list "Test 4" "Test 5" )))
                 ))
+              ))
+
+(define (write-fixed-width widths records #!optional (align #f))
+  (call-with-output-string
+   (lambda (port)
+     (let ((out (writer port delimiter: #f column-widths: widths align: align)))
+       (apply out records)))))
+
+(test-group "fixed-width writer field sizes"
+            (test "short field is padded on the right"
+                  "ab   cdefg\n"
+                  (write-fixed-width '(5 5) (list (list "ab" "cdefgh"))))
+            (test "long field is cut to the column width"
+                  "abc\n"
+                  (write-fixed-width '(3) (list (list "abcdefgh"))))
+            (test "field of exactly the column width is unchanged"
+                  "abcde\n"
+                  (write-fixed-width '(5) (list (list "abcde"))))
+            (test "empty field becomes all spaces"
+                  "   x\n"
+                  (write-fixed-width '(3 1) (list (list "" "x"))))
+            (test "record mixing short and long fields"
+                  "a  longxyzq \n"
+                  (write-fixed-width '(3 4 3 2) (list (list "a" "longfield" "xyz" "q"))))
+            (test "widths count characters, not bytes"
+                  "\x00e4;b  |\n"
+                  (write-fixed-width '(4 1) (list (list "\x00e4;b" "|"))))
+            )
+
+(test-group "fixed-width writer alignment"
+            (test "right-aligned columns are padded on the left"
+                  "ab   cdefg  7\n"
+                  (write-fixed-width '(5 5 3)
+                                     (list (list "ab" "cdefgh" "7"))
+                                     '(left right right)))
+            (test-error "align without column-widths is an error"
+                        (writer (current-output-port) align: '(left)))
+            )
+
+(define (read-fixed-width widths text)
+  (generator->list
+   (call-with-input-string
+    text
+    (lambda (port) (reader* port delimiter: #f column-widths: widths)))))
+
+;; The fixed-width reader returns each field with the exact number of
+;; characters in its column, so padding spaces written by the writer
+;; come back as part of the field and must be trimmed by the caller.
+(test-group "fixed-width writer output read back"
+            (let* ((widths '(6 4 5))
+                   (records '(("alpha" "1" "x")
+                              ("beta" "22" "yy")
+                              ("gamma" "333" "zzzzz")))
+                   (text (write-fixed-width widths records)))
+              (test "reader keeps the padding spaces"
+                    `(("alpha " "1   " "x    ")
+                      ("beta  " "22  " "yy   ")
+                      ("gamma " "333 " "zzzzz"))
+                    (read-fixed-width widths text))
+              (test "trimmed fields equal the original fields"
+                    records
+                    (map (lambda (rec) (map string-trim-right rec))
+                         (read-fixed-width widths text)))
               ))
 
 
